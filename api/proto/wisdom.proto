@@ -26,17 +26,16 @@ message ChallengeResponse {
 message SolutionRequest {
   bytes challenge = 1;  // The challenge provided by the server.
   bytes solution = 2;   // The solution to the challenge.
-  uint32 difficulty = 3; // The difficulty level used to solve the challenge.
 }
 
 // Response containing the word of wisdom if the solution is correct.
 message SolutionResponse {
-  bool valid = 1;      // True if the solution is valid.
-  Wisdom wisdom = 2;   // The word of wisdom (only provided if the solution is valid).
+  Quote quote = 1;   // The word of wisdom (only provided if the solution is valid).
 }
 
 // Wisdom contains a quote and the author of the quote.
-message Wisdom {
-  string quote = 1; // The quote.
+message Quote {
+  string text = 1; // The quote.
   string author = 2; // The author of the quote.
+  int64 id = 3; // The id of the quote.
 }

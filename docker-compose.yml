@@ -1,0 +1,67 @@
+services:
+  ### Web-services
+  server:
+    build:
+      context: .
+      dockerfile: build/Dockerfile.server
+    container_name: word-of-wisdom-server
+    depends_on:
+      - postgres
+      - migrator
+    ports:
+      - "8091:8080"
+    environment:
+      - "CONFIG_PATH=/app/config/config.yaml"
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml
+    networks:
+      - word_of_wisdom_network
+
+  client:
+    build:
+      context: .
+      dockerfile: build/Dockerfile.client
+    container_name: word-of-wisdom-client
+    depends_on:
+      - server
+    environment:
+      - "CONFIG_PATH=/app/config/config.yaml"
+    volumes:
+      - ./config/config.yaml:/app/config/config.yaml
+    networks:
+      - word_of_wisdom_network
+
+  ### Databases
+  postgres:
+    container_name: chat-microservices-postgres
+    image: postgres:16.3-alpine3.20
+    ports:
+      - "55010:5432"
+    environment:
+      - "POSTGRES_DB=${PG_DATABASE_NAME}"
+      - "POSTGRES_USER=${PG_USER}"
+      - "POSTGRES_PASSWORD=${PG_PASSWORD}"
+    restart: always
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    networks:
+      - word_of_wisdom_network
+
+  migrator:
+    container_name: chat-microservices-migrator
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: build/Dockerfile.migrator
+    restart: on-failure
+    networks:
+      - word_of_wisdom_network
+
+networks:
+  word_of_wisdom_network:
+    driver: bridge
+
+volumes:
+  postgres-volume:
+    driver: local

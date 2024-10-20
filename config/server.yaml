@@ -1,0 +1,7 @@
+isSugarLogger: true
+
+difficulty: 4
+addr: "localhost:8080"
+workerCount: 10
+shutdownTimeout: 10
+powTimeout: 10

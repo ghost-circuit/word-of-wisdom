@@ -1,0 +1,5 @@
+isSugarLogger: true
+
+serverAddr: "server:8080"
+rps: 5
+totalRequests: 20

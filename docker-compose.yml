@@ -13,7 +13,7 @@ services:
     environment:
       - "CONFIG_PATH=/app/config/config.yaml"
     volumes:
-      - ./config/config.yaml:/app/config/config.yaml
+      - ./config/server.yaml:/app/config/config.yaml
     networks:
       - word_of_wisdom_network
 
@@ -27,13 +27,13 @@ services:
     environment:
       - "CONFIG_PATH=/app/config/config.yaml"
     volumes:
-      - ./config/config.yaml:/app/config/config.yaml
+      - ./config/client.yaml:/app/config/config.yaml
     networks:
       - word_of_wisdom_network
 
   ### Databases
   postgres:
-    container_name: chat-microservices-postgres
+    container_name: postgres
     image: postgres:16.3-alpine3.20
     ports:
       - "55010:5432"
@@ -48,7 +48,7 @@ services:
       - word_of_wisdom_network
 
   migrator:
-    container_name: chat-microservices-migrator
+    container_name: migrator
     depends_on:
       - postgres
     build:

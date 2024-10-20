@@ -8,10 +8,12 @@ import (
 )
 
 // InitLogger initializes the logger.
-func InitLogger(isSugarLogger bool) {
+func InitLogger(isSugarLogger bool) *slog.Logger {
 	logger := getLogger(isSugarLogger)
 
 	slog.SetDefault(logger)
+
+	return logger
 }
 
 func getLogger(isSugarLogger bool) *slog.Logger {

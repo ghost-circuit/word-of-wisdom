@@ -12,8 +12,8 @@ type DatabaseClient struct {
 	masterDBC *ConnectionPool
 }
 
-// New initializes a new PostgreSQL client with the given data source name (DSN).
-func New(ctx context.Context, dsn string) (*DatabaseClient, error) {
+// NewClient initializes a new PostgreSQL client with the given data source name (DatabaseDSN).
+func NewClient(ctx context.Context, dsn string) (*DatabaseClient, error) {
 	dbc, err := pgxpool.New(ctx, dsn)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to db: %w", err)

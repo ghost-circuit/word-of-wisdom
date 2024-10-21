@@ -27,7 +27,7 @@ func NewApp() *fx.App {
 		fx.Provide(func() context.Context {
 			return context.Background()
 		}),
-		fx.Provide(config.MustLoadConfig),
+		fx.Provide(config.LoadConfig),
 		fx.Provide(NewLogger),
 		fx.Provide(NewDatabaseClient),
 		fx.Provide(NewRepository),

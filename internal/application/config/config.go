@@ -14,7 +14,6 @@ type Config struct {
 	IsSugarLogger bool   `yaml:"isSugarLogger"`
 	Difficulty    uint8  `yaml:"difficulty"`
 	Addr          string `yaml:"addr"`
-	PowTimeout    int    `yaml:"powTimeout"`
 
 	Postgres struct {
 		Host     string `yaml:"host"`
@@ -37,16 +36,16 @@ func (c *Config) DatabaseDSN() string {
 	)
 }
 
-// MustLoadConfig creates and returns a new Config instance.
-func MustLoadConfig() *Config {
+// LoadConfig creates and returns a new Config instance.
+func LoadConfig() (*Config, error) {
 	var cfg Config
 
 	err := cleanenv.ReadConfig(loadConfigPath(), &cfg)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return &cfg
+	return &cfg, nil
 }
 
 func loadConfigPath() string {

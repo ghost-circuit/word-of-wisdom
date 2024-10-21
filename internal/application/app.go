@@ -2,7 +2,6 @@ package application
 
 import (
 	"context"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 	"log/slog"
 
 	"github.com/robbert229/fxslog"
@@ -19,6 +18,7 @@ import (
 	grpcserver "github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server"
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server/interceptor"
 	powalgorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
+	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 )
 
 func NewApp() *fx.App {
@@ -41,16 +41,14 @@ func NewApp() *fx.App {
 
 func NewLogger(cfg *config.Config) *slog.Logger {
 	log := logger.InitLogger(cfg.IsSugarLogger)
-
-	slog.Debug("configured logger", slog.Any("config", cfg))
-
+	slog.Debug("Configured logger", slog.Any("config", cfg))
 	return log
 }
 
-func NewDatabaseClient(lc fx.Lifecycle, ctx context.Context, cfg *config.Config) *postgres.DatabaseClient {
+func NewDatabaseClient(lc fx.Lifecycle, ctx context.Context, cfg *config.Config) (*postgres.DatabaseClient, error) {
 	client, err := postgres.NewClient(ctx, cfg.DatabaseDSN())
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	lc.Append(fx.Hook{
@@ -58,23 +56,19 @@ func NewDatabaseClient(lc fx.Lifecycle, ctx context.Context, cfg *config.Config)
 			if errPing := client.Ping(ctx); errPing != nil {
 				return errPing
 			}
-
-			slog.Info("database connection established")
-
+			slog.Info("Database connection established")
 			return nil
 		},
 		OnStop: func(_ context.Context) error {
 			if errClose := client.Close(); errClose != nil {
 				return errClose
 			}
-
-			slog.Info("database connection closed")
-
+			slog.Info("Database connection closed")
 			return nil
 		},
 	})
 
-	return client
+	return client, nil
 }
 
 func NewRepository(client *postgres.DatabaseClient) *repositoryQuote.Repository {
@@ -93,7 +87,7 @@ func NewGRPCHandlers(service *serviceWordOfWisdom.WordOfWisdomService) *grpchand
 	return grpchandlers.NewWordOfWisdomHandlers(service)
 }
 
-func NewGRPCServer(lc fx.Lifecycle, cfg *config.Config, handlers *grpchandlers.WordOfWisdomHandlers) *grpcserver.Server {
+func NewGRPCServer(lc fx.Lifecycle, cfg *config.Config, handlers *grpchandlers.WordOfWisdomHandlers) (*grpcserver.Server, error) {
 	srv, err := grpcserver.NewGRPCServer(
 		cfg.Addr,
 		[]grpcserver.Service{
@@ -105,32 +99,30 @@ func NewGRPCServer(lc fx.Lifecycle, cfg *config.Config, handlers *grpchandlers.W
 		grpc.Creds(insecure.NewCredentials()),
 		grpc.ChainUnaryInterceptor(
 			interceptor.Recover,
-			interceptor.Logging,
+			interceptor.Logger,
 			grpchandlers.ConvertErrorInterceptor,
 		),
 	)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	lc.Append(fx.Hook{
 		OnStart: func(_ context.Context) error {
 			srv.Start()
-			slog.Info("grpc server started", slog.String("address", cfg.Addr))
-
+			slog.Info("gRPC server started", slog.String("address", cfg.Addr))
 			return nil
 		},
 		OnStop: func(_ context.Context) error {
 			srv.Stop()
-			slog.Info("grpc server stopped")
-
+			slog.Info("gRPC server stopped")
 			return nil
 		},
 	})
 
-	return srv
+	return srv, nil
 }
 
 func invoke(*grpcserver.Server) {
-	slog.Info("application started")
+	slog.Info("Application started")
 }

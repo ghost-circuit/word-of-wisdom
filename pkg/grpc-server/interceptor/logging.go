@@ -3,55 +3,24 @@ package interceptor
 import (
 	"context"
 	"log/slog"
-	"time"
 
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/proto"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 )
 
-// Logging is a gRPC interceptor that logs the details of each RPC call.
-func Logging(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
-	start := time.Now()
-
-	defer func() {
-		duration := time.Since(start)
-
-		var reqSize, respSize int
-		if protoReq, ok := req.(proto.Message); ok {
-			reqSize = proto.Size(protoReq)
-		}
-
-		if protoResp, ok := resp.(proto.Message); ok {
-			respSize = proto.Size(protoResp)
-		}
-
-		code := errorCode(err).String()
-
-		slog.Info("rpc call",
-			slog.String("method", info.FullMethod),
-			slog.Duration("duration", duration),
-			slog.Int("request_size", reqSize),
-			slog.Int("response_size", respSize),
-			slog.String("code", code),
-		)
-	}()
-
-	resp, err = handler(ctx, req)
-
-	return
-}
-
-func errorCode(err error) codes.Code {
-	if err == nil {
-		return codes.OK
+var (
+	// loggerOpts are the options for the loggerFunc interceptor.
+	loggerOpts = []logging.Option{
+		logging.WithLogOnEvents(logging.StartCall, logging.FinishCall),
+		// Add any other option (check functions starting with logging.With).
 	}
 
-	errStatus, ok := status.FromError(err)
-	if !ok {
-		return codes.Unknown
-	}
+	// loggerFunc is the loggerFunc for the loggerFunc interceptor.
+	loggerFunc = logging.LoggerFunc(
+		func(ctx context.Context, lvl logging.Level, msg string, fields ...any) {
+			slog.Log(ctx, slog.Level(lvl), msg, fields...)
+		},
+	)
 
-	return errStatus.Code()
-}
+	// Logger is the logger interceptor.
+	Logger = logging.UnaryServerInterceptor(loggerFunc, loggerOpts...)
+)

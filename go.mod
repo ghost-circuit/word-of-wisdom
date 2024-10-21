@@ -5,6 +5,7 @@ go 1.22.7
 require (
 	github.com/georgysavva/scany/v2 v2.1.3
 	github.com/golang-cz/devslog v0.0.11
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/robbert229/fxslog v1.1.0

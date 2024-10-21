@@ -10,10 +10,10 @@ const _defaultConfigPath = "config/client.yaml"
 
 // Config represents the client configuration.
 type Config struct {
-	IsSugarLogger bool   `yaml:"isSugarLogger"`
-	ServerAddr    string `yaml:"serverAddr"`
-	RPS           int    `yaml:"rps"`
-	TotalRequests int    `yaml:"totalRequests"`
+	IsSugarLogger     bool   `yaml:"isSugarLogger"`
+	ServerAddr        string `yaml:"serverAddr"`
+	CountWorker       int    `yaml:"rps"`
+	RequestsPerWorker int    `yaml:"totalRequests"`
 }
 
 // NewConfig creates a new client configuration.

@@ -53,8 +53,13 @@ func (pow *ProofOfWorkManager) GenerateChallenge() ([]byte, uint8, error) {
 }
 
 // ValidateSolution checks whether the given solution is valid for the provided challenge.
-// A solution is valid if the hash of the concatenated challenge and solution has the required number of leading zero bits (determined by the difficulty).
 func (pow *ProofOfWorkManager) ValidateSolution(challenge, solution []byte) bool {
+	return pow.ValidateSolutionCustomDifficulty(challenge, solution, pow.difficulty)
+}
+
+// ValidateSolutionCustomDifficulty checks whether the given solution is valid for the provided challenge with custom difficulty.
+// A solution is valid if the hash of the concatenated challenge and solution has the required number of leading zero bits (determined by the difficulty).
+func (pow *ProofOfWorkManager) ValidateSolutionCustomDifficulty(challenge, solution []byte, difficulty uint8) bool {
 	// Combine the challenge and solution (typically the nonce) into one byte slice
 	data := append(challenge, solution...)
 
@@ -62,10 +67,10 @@ func (pow *ProofOfWorkManager) ValidateSolution(challenge, solution []byte) bool
 	hash := sha256.Sum256(data)
 
 	// fullBytes represents how many full bytes (8 bits each) we need to check for zero.
-	fullBytes := int(pow.difficulty / ByteSize)
+	fullBytes := int(difficulty / ByteSize)
 
 	// remainingBits represents the number of remaining bits to check after checking full bytes.
-	remainingBits := pow.difficulty % ByteSize
+	remainingBits := difficulty % ByteSize
 
 	// Check all full bytes first. All full bytes must be zero for a valid solution.
 	for i := 0; i < fullBytes; i++ {
@@ -91,9 +96,14 @@ func (pow *ProofOfWorkManager) ValidateSolution(challenge, solution []byte) bool
 }
 
 // Solve tries to find a valid solution (nonce) for the given challenge by brute-forcing through possible nonces.
+func (pow *ProofOfWorkManager) Solve(challenge []byte) ([]byte, error) {
+	return pow.SolveCustomDifficulty(challenge, pow.difficulty)
+}
+
+// SolveCustomDifficulty tries to find a valid solution (nonce) for the given challenge by brute-forcing through possible nonces.
 // It increments the nonce until a valid solution is found (i.e., the hash has the required number of leading zero bits).
 // Returns the solution (nonce) or an error if no solution can be found (e.g., nonce space exhaustion).
-func (pow *ProofOfWorkManager) Solve(challenge []byte) ([]byte, error) {
+func (pow *ProofOfWorkManager) SolveCustomDifficulty(challenge []byte, difficulty uint8) ([]byte, error) {
 	var nonce uint64 // Start the nonce at 0
 
 	// Infinite loop to brute-force nonces until a valid solution is found
@@ -102,7 +112,7 @@ func (pow *ProofOfWorkManager) Solve(challenge []byte) ([]byte, error) {
 		nonceBytes := uint64ToBytes(nonce)
 
 		// Check if the current nonce is a valid solution
-		if pow.ValidateSolution(challenge, nonceBytes) {
+		if pow.ValidateSolutionCustomDifficulty(challenge, nonceBytes, difficulty) {
 			return nonceBytes, nil // Return the nonce if it's valid
 		}
 

@@ -1,72 +1,103 @@
 package client
 
 import (
+	"encoding/hex"
+	"fmt"
+	"log/slog"
 	"sync"
 	"sync/atomic"
 	"time"
 
+	"github.com/google/uuid"
+
 	powalgorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
 )
 
-// Service
+// Service represents a client service.
 type Service struct {
-	powManager   *powalgorithm.ProofOfWorkManager
-	client       *GrpcClient
-	printer      *Printer
+	serviceID  int
+	powManager *powalgorithm.ProofOfWorkManager
+	client     *GrpcClient
+
 	requestCount int32
 }
 
-func NewService(manager *powalgorithm.ProofOfWorkManager, client *GrpcClient, printer *Printer, requestCount int32) *Service {
+func NewService(manager *powalgorithm.ProofOfWorkManager, client *GrpcClient, serviceID int, requestCount int32) *Service {
 	return &Service{
 		powManager:   manager,
 		client:       client,
-		printer:      printer,
+		serviceID:    serviceID,
 		requestCount: requestCount,
 	}
 }
 
 func (s *Service) ExecuteSequential() {
 	start := time.Now()
+	counter := 0
 
 	defer func() {
 		end := time.Now()
 
-		s.printer.PrintFinishWork(end.Sub(start))
+		slog.Info("Finished sequential work",
+			slog.Int("serviceID", s.serviceID),
+			slog.Duration("duration", end.Sub(start)),
+			slog.Int("count", counter),
+		)
 	}()
 
 	flag := true
 
+	counter -= 1
 	for flag {
 		flag = s.executeOne()
+		counter++
 	}
 }
 
 func (s *Service) ExecuteParallel() {
 	start := time.Now()
+	counter := 0
 
 	defer func() {
 		end := time.Now()
-
-		s.printer.PrintFinishWork(end.Sub(start))
+		slog.Info("Finished parallel work",
+			slog.Int("serviceID", s.serviceID),
+			slog.Duration("duration", end.Sub(start)),
+			slog.Int("count", counter),
+		)
 	}()
 
 	var wg sync.WaitGroup
+	channel := make(chan bool, s.requestCount)
 
-	channel := make(chan bool, 1)
-	channel <- true
-	defer close(channel)
-
-	for flag := <-channel; flag; {
+	for i := int32(0); i < s.requestCount; i++ {
+		counter++
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
-			channel <- s.executeOne()
+			if s.executeOne() {
+				channel <- true
+			} else {
+				channel <- false
+			}
 		}()
 	}
 
-	wg.Wait()
+	// Close the channel once all goroutines are done
+	go func() {
+		wg.Wait()
+		close(channel)
+	}()
+
+	// Process the results
+	for flag := range channel {
+		if !flag {
+			break
+		}
+	}
+
 }
 
 func (s *Service) executeOne() bool {
@@ -78,36 +109,61 @@ func (s *Service) executeOne() bool {
 		return false
 	}
 
-	s.execute()
+	taskID, err := uuid.NewV7()
+	if err != nil {
+		slog.Error("failed to generate uuid",
+			slog.Int("serviceID", s.serviceID),
+			slog.Any("error", err),
+		)
+	}
+
+	if err = s.execute(taskID); err != nil {
+		slog.Error("failed to execute",
+			slog.Any("error", err),
+			slog.Int("serviceID", s.serviceID),
+			slog.String("taskID", taskID.String()),
+		)
+	}
 
 	return true
 }
 
-func (s *Service) execute() {
+func (s *Service) execute(taskID uuid.UUID) error {
 	challenge, difficulty, err := s.client.GetChallenge()
 	if err != nil {
-		s.printer.PrintError("failed to get challenge", err)
-
-		return
+		return fmt.Errorf("client.Service.execute, get challenge: %w", err)
 	}
 
-	s.printer.PrintCurrentChallenge(challenge, difficulty)
+	slog.Info("Received challenge",
+		slog.Int("serviceID", s.serviceID),
+		slog.String("challenge", hex.EncodeToString(challenge)),
+		slog.Int("difficulty", int(difficulty)),
+		slog.String("taskID", taskID.String()),
+	)
 
 	solution, err := s.powManager.SolveCustomDifficulty(challenge, difficulty)
 	if err != nil {
-		s.printer.PrintError("failed to find solution", err)
-
-		return
+		return fmt.Errorf("client.Service.execute, find challenge: %w", err)
 	}
 
-	s.printer.PrintSolution(challenge, solution)
+	slog.Info("Found solution",
+		slog.Int("serviceID", s.serviceID),
+		slog.String("challenge", hex.EncodeToString(challenge)),
+		slog.String("solution", hex.EncodeToString(solution)),
+	)
 
 	quote, err := s.client.SubmitSolution(challenge, solution)
 	if err != nil {
-		s.printer.PrintError("failed to submit solution", err)
+		return fmt.Errorf("client.Service.execute, submit solution: %w", err)
 
-		return
 	}
 
-	s.printer.PrintQuote(quote)
+	slog.Info("Saved quote",
+		slog.Int("serviceID", s.serviceID),
+		slog.Int64("id", quote.ID),
+		slog.String("text", quote.Text),
+		slog.String("author", quote.Author),
+	)
+
+	return nil
 }

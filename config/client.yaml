@@ -1,5 +1,5 @@
 isSugarLogger: true
 
-serverAddr: "server:8080"
+serverAddr: "word-of-wisdom-server:8080"
 countWorker: 2
-requestsPerWorker: 20
+requestsPerWorker: 10

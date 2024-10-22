@@ -44,7 +44,7 @@ func run() error {
 			service := client.NewService(
 				pow_algorithm.NewProofOfWorkManager(0),
 				grpcClient,
-				client.NewPrinter(i),
+				i,
 				int32(cfg.RequestsPerWorker),
 			)
 

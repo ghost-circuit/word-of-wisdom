@@ -4,6 +4,12 @@
 
 This project contains a TCP server that implements Proof of Work (PoW) to protect against DDoS attacks, serving quotes from a “Word of Wisdom” collection. The project also includes a client that connects to the server, solves the PoW challenge, and receives quotes.
 
+## Quick Start
+
+```bash
+make docker-client-up
+```
+
 ## Choosing a PoW Algorithm
 
 We will use HashCash as the PoW algorithm. It is simple and widely used in scenarios where the server needs to limit client requests through computational effort.
@@ -64,17 +70,22 @@ The Makefile supports various commands to manage your development workflow.
 
 ### Docker Commands
 
-1. **Start Docker Containers for Server**:
+1. **Start Docker Containers**:
    ```bash
    make docker-up
    ```
 
-2. **Stop Docker Containers for Client**:
+2. **Start Docker Containers and Print client logs**:
+   ```bash
+   make docker-client-up
+   ```
+
+3. **Stop Docker Containers**:
    ```bash
    make docker-stop
    ```
 
-3. **Remove Docker Containers for Client**:
+4. **Remove Docker Containers for Client**:
    ```bash
    make docker-down
    ```

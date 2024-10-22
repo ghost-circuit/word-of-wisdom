@@ -11,6 +11,7 @@ install:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 	go install github.com/pressly/goose/v3/cmd/goose@v3.14.0
+	go install github.com/gojuno/minimock/v3/cmd/minimock@latest
 
 generate-proto:
 	protoc --proto_path api/proto \
@@ -26,6 +27,7 @@ prepare:
 	make tidy
 	make fmt
 	make lint
+	make mock
 	make test
 
 tidy:
@@ -37,6 +39,9 @@ fmt:
 
 lint:
 	golangci-lint run ./pkg/... ./internal/...
+
+mock:
+	go generate ./...
 
 test:
 	go test -v -race ./pkg/... ./internal/...
@@ -54,6 +59,9 @@ migration-create:
 ### Continues Deployment
 docker-up:
 	docker compose up --build --detach
+
+docker-client-up:
+	docker compose up --build client
 
 docker-stop:
 	docker compose stop

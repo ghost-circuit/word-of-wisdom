@@ -9,20 +9,18 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-
-	powalgorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
 )
 
 // Service represents a client service.
 type Service struct {
-	serviceID  int
-	powManager *powalgorithm.ProofOfWorkManager
-	client     *GrpcClient
-
+	serviceID    int
+	powManager   PowManager
+	client       Client
 	requestCount int32
 }
 
-func NewService(manager *powalgorithm.ProofOfWorkManager, client *GrpcClient, serviceID int, requestCount int32) *Service {
+// NewService creates a new service.
+func NewService(manager PowManager, client Client, serviceID int, requestCount int32) *Service {
 	return &Service{
 		powManager:   manager,
 		client:       client,
@@ -31,6 +29,7 @@ func NewService(manager *powalgorithm.ProofOfWorkManager, client *GrpcClient, se
 	}
 }
 
+// ExecuteSequential executes the service sequentially.
 func (s *Service) ExecuteSequential() {
 	start := time.Now()
 	counter := 0
@@ -47,13 +46,14 @@ func (s *Service) ExecuteSequential() {
 
 	flag := true
 
-	counter -= 1
 	for flag {
 		flag = s.executeOne()
 		counter++
 	}
+	counter--
 }
 
+// ExecuteParallel executes the service in parallel.
 func (s *Service) ExecuteParallel() {
 	start := time.Now()
 	counter := 0
@@ -70,7 +70,7 @@ func (s *Service) ExecuteParallel() {
 	var wg sync.WaitGroup
 	channel := make(chan bool, s.requestCount)
 
-	for i := int32(0); i < s.requestCount; i++ {
+	for i := int32(0); i <= s.requestCount; i++ {
 		counter++
 		wg.Add(1)
 
@@ -97,7 +97,6 @@ func (s *Service) ExecuteParallel() {
 			break
 		}
 	}
-
 }
 
 func (s *Service) executeOne() bool {
@@ -155,7 +154,6 @@ func (s *Service) execute(taskID uuid.UUID) error {
 	quote, err := s.client.SubmitSolution(challenge, solution)
 	if err != nil {
 		return fmt.Errorf("client.Service.execute, submit solution: %w", err)
-
 	}
 
 	slog.Info("Saved quote",

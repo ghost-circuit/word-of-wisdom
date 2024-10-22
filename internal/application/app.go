@@ -21,6 +21,7 @@ import (
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 )
 
+// NewApp creates a new application.
 func NewApp() *fx.App {
 	return fx.New(
 		fxslog.WithLogger(),
@@ -28,24 +29,26 @@ func NewApp() *fx.App {
 			return context.Background()
 		}),
 		fx.Provide(config.LoadConfig),
-		fx.Provide(NewLogger),
-		fx.Provide(NewDatabaseClient),
-		fx.Provide(NewRepository),
-		fx.Provide(NewPoWManager),
-		fx.Provide(NewQuoteService),
-		fx.Provide(NewGRPCServer),
-		fx.Provide(NewGRPCHandlers),
+		fx.Provide(newLogger),
+		fx.Provide(newDatabaseClient),
+		fx.Provide(newRepository),
+		fx.Provide(newPoWManager),
+		fx.Provide(newQuoteService),
+		fx.Provide(newGRPCServer),
+		fx.Provide(newGRPCHandlers),
 		fx.Invoke(invoke),
 	)
 }
 
-func NewLogger(cfg *config.Config) *slog.Logger {
+// newLogger creates a new logger.
+func newLogger(cfg *config.Config) *slog.Logger {
 	log := logger.InitLogger(cfg.IsSugarLogger)
 	slog.Debug("Configured logger", slog.Any("config", cfg))
 	return log
 }
 
-func NewDatabaseClient(lc fx.Lifecycle, ctx context.Context, cfg *config.Config) (*postgres.DatabaseClient, error) {
+// newDatabaseClient creates a new database client.
+func newDatabaseClient(ctx context.Context, lc fx.Lifecycle, cfg *config.Config) (*postgres.DatabaseClient, error) {
 	client, err := postgres.NewClient(ctx, cfg.DatabaseDSN())
 	if err != nil {
 		return nil, err
@@ -71,23 +74,28 @@ func NewDatabaseClient(lc fx.Lifecycle, ctx context.Context, cfg *config.Config)
 	return client, nil
 }
 
-func NewRepository(client *postgres.DatabaseClient) *repositoryQuote.Repository {
+// newRepository creates a new repository.
+func newRepository(client *postgres.DatabaseClient) *repositoryQuote.Repository {
 	return repositoryQuote.NewRepository(client.DB())
 }
 
-func NewPoWManager(cfg *config.Config) *powalgorithm.ProofOfWorkManager {
+// newPoWManager creates a new PoW manager.
+func newPoWManager(cfg *config.Config) *powalgorithm.ProofOfWorkManager {
 	return powalgorithm.NewProofOfWorkManager(cfg.Difficulty)
 }
 
-func NewQuoteService(repo *repositoryQuote.Repository, powManager *powalgorithm.ProofOfWorkManager) *serviceWordOfWisdom.WordOfWisdomService {
+// newQuoteService creates a new quote service.
+func newQuoteService(repo *repositoryQuote.Repository, powManager *powalgorithm.ProofOfWorkManager) *serviceWordOfWisdom.WordOfWisdomService {
 	return serviceWordOfWisdom.NewWordOfWisdomService(repo, powManager)
 }
 
-func NewGRPCHandlers(service *serviceWordOfWisdom.WordOfWisdomService) *grpchandlers.WordOfWisdomHandlers {
+// newGRPCHandlers creates new gRPC handlers.
+func newGRPCHandlers(service *serviceWordOfWisdom.WordOfWisdomService) *grpchandlers.WordOfWisdomHandlers {
 	return grpchandlers.NewWordOfWisdomHandlers(service)
 }
 
-func NewGRPCServer(lc fx.Lifecycle, cfg *config.Config, handlers *grpchandlers.WordOfWisdomHandlers) (*grpcserver.Server, error) {
+// newGRPCServer creates a new gRPC server.
+func newGRPCServer(lc fx.Lifecycle, cfg *config.Config, handlers *grpchandlers.WordOfWisdomHandlers) (*grpcserver.Server, error) {
 	srv, err := grpcserver.NewGRPCServer(
 		cfg.Addr,
 		[]grpcserver.Service{

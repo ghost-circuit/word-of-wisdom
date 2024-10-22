@@ -25,6 +25,7 @@ type Config struct {
 	} `yaml:"database"`
 }
 
+// DatabaseDSN returns the database DSN.
 func (c *Config) DatabaseDSN() string {
 	return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		c.Postgres.Host,

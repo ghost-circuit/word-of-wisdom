@@ -4,6 +4,7 @@ go 1.22.7
 
 require (
 	github.com/georgysavva/scany/v2 v2.1.3
+	github.com/gojuno/minimock/v3 v3.4.1
 	github.com/golang-cz/devslog v0.0.11
 	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0

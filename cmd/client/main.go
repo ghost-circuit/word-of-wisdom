@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
-	pow_algorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 	"log/slog"
 	"os"
 	"sync"
+
+	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
+	pow_algorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
+	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 )
 
 func main() {

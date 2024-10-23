@@ -10,6 +10,8 @@ import (
 )
 
 func TestService_ExecuteSequential(t *testing.T) {
+	t.Parallel()
+
 	var (
 		ctrl       = minimock.NewController(t)
 		times      = uint64(10)
@@ -35,6 +37,8 @@ func TestService_ExecuteSequential(t *testing.T) {
 }
 
 func TestService_ExecuteParallel(t *testing.T) {
+	t.Parallel()
+
 	var (
 		ctrl       = minimock.NewController(t)
 		times      = uint64(10)

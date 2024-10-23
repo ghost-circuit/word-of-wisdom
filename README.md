@@ -21,10 +21,6 @@ This approach is computationally challenging for the client, making it harder to
    make docker-up
    ```
 
-**Important: the `.env` file redeclare base env variables from `configs` directory.**
-
-**Important: you don't need to configure `.env` file if you run application through `docker-compose`**
-
 ### Makefile Overview
 
 The provided Makefile simplifies the process of building, running, testing, and linting the project, as well as building Docker images for both the server and the client.

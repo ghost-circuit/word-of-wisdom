@@ -135,6 +135,7 @@ func (s *Service) execute(taskID uuid.UUID) error {
 		slog.Int("serviceID", s.serviceID),
 		slog.String("challenge", hex.EncodeToString(challenge)),
 		slog.String("solution", hex.EncodeToString(solution)),
+		slog.String("taskID", taskID.String()),
 	)
 
 	quote, err := s.client.SubmitSolution(challenge, solution)
@@ -147,6 +148,7 @@ func (s *Service) execute(taskID uuid.UUID) error {
 		slog.Int64("id", quote.ID),
 		slog.String("text", quote.Text),
 		slog.String("author", quote.Author),
+		slog.String("taskID", taskID.String()),
 	)
 
 	return nil

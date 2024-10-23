@@ -10,15 +10,15 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/alisher-baizhumanov/word-of-wisdom/internal/application/config"
-	serviceWordOfWisdom "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/word-of-wisdom"
+	wisdomTask "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/wisdom-task"
 	repositoryQuote "github.com/alisher-baizhumanov/word-of-wisdom/internal/infrastructure/postgres/quote"
 	grpchandlers "github.com/alisher-baizhumanov/word-of-wisdom/internal/presentation/grpc-handlers"
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/adapter/postgres"
 	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
 	grpcserver "github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server"
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server/interceptor"
+	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/logger"
 	powalgorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/system/logger"
 )
 
 // NewApp creates a new application.
@@ -85,12 +85,12 @@ func newPoWManager(cfg *config.Config) *powalgorithm.ProofOfWorkManager {
 }
 
 // newQuoteService creates a new quote service.
-func newQuoteService(repo *repositoryQuote.Repository, powManager *powalgorithm.ProofOfWorkManager) *serviceWordOfWisdom.WordOfWisdomService {
-	return serviceWordOfWisdom.NewWordOfWisdomService(repo, powManager)
+func newQuoteService(repo *repositoryQuote.Repository, powManager *powalgorithm.ProofOfWorkManager) *wisdomTask.WisdomTaskService {
+	return wisdomTask.NewWisdomTaskService(repo, powManager)
 }
 
 // newGRPCHandlers creates new gRPC handlers.
-func newGRPCHandlers(service *serviceWordOfWisdom.WordOfWisdomService) *grpchandlers.WordOfWisdomHandlers {
+func newGRPCHandlers(service *wisdomTask.WisdomTaskService) *grpchandlers.WordOfWisdomHandlers {
 	return grpchandlers.NewWordOfWisdomHandlers(service)
 }
 

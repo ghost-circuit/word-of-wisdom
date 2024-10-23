@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/interfaces"
+	wisdomtask "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/wisdom-task"
 	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
 )
 
@@ -13,11 +13,11 @@ import (
 type WordOfWisdomHandlers struct {
 	desc.UnimplementedWordOfWisdomServiceServer
 
-	service interfaces.WordOfWisdomService
+	service *wisdomtask.WisdomTaskService
 }
 
 // NewWordOfWisdomHandlers creates a new WordOfWisdomHandlers.
-func NewWordOfWisdomHandlers(service interfaces.WordOfWisdomService) *WordOfWisdomHandlers {
+func NewWordOfWisdomHandlers(service *wisdomtask.WisdomTaskService) *WordOfWisdomHandlers {
 	return &WordOfWisdomHandlers{
 		service: service,
 	}

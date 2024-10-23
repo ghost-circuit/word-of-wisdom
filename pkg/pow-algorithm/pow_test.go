@@ -8,6 +8,8 @@ import (
 )
 
 func TestGenerateChallenge(t *testing.T) {
+	t.Parallel()
+
 	pow := NewProofOfWorkManager(20)
 
 	challenge1, _, err1 := pow.GenerateChallenge()
@@ -23,6 +25,8 @@ func TestGenerateChallenge(t *testing.T) {
 }
 
 func TestValidateSolution_Valid(t *testing.T) {
+	t.Parallel()
+
 	pow := NewProofOfWorkManager(20)
 
 	challenge, _, err := pow.GenerateChallenge()
@@ -36,6 +40,8 @@ func TestValidateSolution_Valid(t *testing.T) {
 }
 
 func TestValidateSolution_Invalid(t *testing.T) {
+	t.Parallel()
+
 	pow := NewProofOfWorkManager(20)
 	challenge, _, err := pow.GenerateChallenge()
 	require.NoError(t, err)
@@ -51,6 +57,8 @@ func TestValidateSolution_Invalid(t *testing.T) {
 }
 
 func TestSolve(t *testing.T) {
+	t.Parallel()
+
 	pow := NewProofOfWorkManager(20)
 	challenge, _, err := pow.GenerateChallenge()
 	require.NoError(t, err)

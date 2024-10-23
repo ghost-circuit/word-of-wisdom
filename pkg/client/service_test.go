@@ -1,10 +1,12 @@
 package client_test
 
 import (
+	"testing"
+
+	"github.com/gojuno/minimock/v3"
+
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
 	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client/mocks"
-	"github.com/gojuno/minimock/v3"
-	"testing"
 )
 
 func TestService_ExecuteSequential(t *testing.T) {

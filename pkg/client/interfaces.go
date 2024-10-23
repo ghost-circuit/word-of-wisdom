@@ -8,6 +8,7 @@ type PowManager interface {
 	SolveCustomDifficulty(challenge []byte, difficulty uint8) ([]byte, error)
 }
 
+// Client is an interface for the client.
 type Client interface {
 	SubmitSolution(challenge []byte, solution []byte) (Quote, error)
 	GetChallenge() ([]byte, uint8, error)

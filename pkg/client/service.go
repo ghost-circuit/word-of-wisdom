@@ -68,35 +68,21 @@ func (s *Service) ExecuteParallel() {
 	}()
 
 	var wg sync.WaitGroup
-	channel := make(chan bool, s.requestCount)
 
-	for i := int32(0); i <= s.requestCount; i++ {
+	currentCount := atomic.LoadInt32(&s.requestCount)
+
+	for i := int32(0); i <= currentCount; i++ {
 		counter++
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
-			if s.executeOne() {
-				channel <- true
-			} else {
-				channel <- false
-			}
+			_ = s.executeOne()
 		}()
 	}
 
-	// Close the channel once all goroutines are done
-	go func() {
-		wg.Wait()
-		close(channel)
-	}()
-
-	// Process the results
-	for flag := range channel {
-		if !flag {
-			break
-		}
-	}
+	wg.Wait()
 }
 
 func (s *Service) executeOne() bool {

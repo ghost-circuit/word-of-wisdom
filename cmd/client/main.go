@@ -6,9 +6,9 @@ import (
 	"os"
 	"sync"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/logger"
-	pow_algorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/client"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/logger"
+	pow_algorithm "github.com/ghost-circuit/word-of-wisdom/pkg/pow-algorithm"
 )
 
 func main() {

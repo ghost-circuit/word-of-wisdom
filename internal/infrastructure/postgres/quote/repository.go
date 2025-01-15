@@ -1,6 +1,6 @@
 package quote
 
-import "github.com/alisher-baizhumanov/word-of-wisdom/pkg/adapter/postgres"
+import "github.com/ghost-circuit/word-of-wisdom/pkg/adapter/postgres"
 
 // Repository represents the quote repository.
 type Repository struct {

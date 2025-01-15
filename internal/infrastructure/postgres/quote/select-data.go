@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/consts"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/adapter/postgres"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/consts"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/adapter/postgres"
 )
 
 // GetRandomQuote returns a random quote.

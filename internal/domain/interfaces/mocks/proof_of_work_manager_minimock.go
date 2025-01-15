@@ -2,7 +2,7 @@
 
 package mocks
 
-//go:generate minimock -i github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/interfaces.ProofOfWorkManager -o proof_of_work_manager_minimock.go -n ProofOfWorkManagerMock -p mocks
+//go:generate minimock -i github.com/ghost-circuit/word-of-wisdom/internal/domain/interfaces.ProofOfWorkManager -o proof_of_work_manager_minimock.go -n ProofOfWorkManagerMock -p mocks
 
 import (
 	"sync"

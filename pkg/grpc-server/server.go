@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server/interceptor"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/grpc-server/interceptor"
 )
 
 // DefaultOptions is a set of default gRPC server options that include:

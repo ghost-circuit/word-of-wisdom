@@ -3,7 +3,7 @@ package interfaces
 import (
 	"context"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
 )
 
 // QuoteRepository is an interface for interacting with the quote repository.

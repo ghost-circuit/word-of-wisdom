@@ -9,16 +9,16 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/application/config"
-	wisdomTask "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/wisdom-task"
-	repositoryQuote "github.com/alisher-baizhumanov/word-of-wisdom/internal/infrastructure/postgres/quote"
-	grpchandlers "github.com/alisher-baizhumanov/word-of-wisdom/internal/presentation/grpc-handlers"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/adapter/postgres"
-	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
-	grpcserver "github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/grpc-server/interceptor"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/logger"
-	powalgorithm "github.com/alisher-baizhumanov/word-of-wisdom/pkg/pow-algorithm"
+	"github.com/ghost-circuit/word-of-wisdom/internal/application/config"
+	wisdomTask "github.com/ghost-circuit/word-of-wisdom/internal/domain/service/wisdom-task"
+	repositoryQuote "github.com/ghost-circuit/word-of-wisdom/internal/infrastructure/postgres/quote"
+	grpchandlers "github.com/ghost-circuit/word-of-wisdom/internal/presentation/grpc-handlers"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/adapter/postgres"
+	desc "github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom"
+	grpcserver "github.com/ghost-circuit/word-of-wisdom/pkg/grpc-server"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/grpc-server/interceptor"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/logger"
+	powalgorithm "github.com/ghost-circuit/word-of-wisdom/pkg/pow-algorithm"
 )
 
 // NewApp creates a new application.

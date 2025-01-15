@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
-	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom"
+	desc "github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom"
 )
 
 // GrpcClient represents a gRPC client.

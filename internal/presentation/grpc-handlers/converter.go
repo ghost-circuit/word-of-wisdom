@@ -6,10 +6,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/consts"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/form"
-	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/consts"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/form"
+	desc "github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom"
 )
 
 func convertError(err error) error {

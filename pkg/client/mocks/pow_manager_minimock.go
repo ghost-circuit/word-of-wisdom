@@ -2,7 +2,7 @@
 
 package mocks
 
-//go:generate minimock -i github.com/alisher-baizhumanov/word-of-wisdom/pkg/client.PowManager -o pow_manager_minimock.go -n PowManagerMock -p mocks
+//go:generate minimock -i github.com/ghost-circuit/word-of-wisdom/pkg/client.PowManager -o pow_manager_minimock.go -n PowManagerMock -p mocks
 
 import (
 	"sync"

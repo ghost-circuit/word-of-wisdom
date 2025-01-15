@@ -2,14 +2,14 @@
 
 package mocks
 
-//go:generate minimock -i github.com/alisher-baizhumanov/word-of-wisdom/pkg/client.Client -o client_minimock.go -n ClientMock -p mocks
+//go:generate minimock -i github.com/ghost-circuit/word-of-wisdom/pkg/client.Client -o client_minimock.go -n ClientMock -p mocks
 
 import (
 	"sync"
 	mm_atomic "sync/atomic"
 	mm_time "time"
 
-	mm_client "github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
+	mm_client "github.com/ghost-circuit/word-of-wisdom/pkg/client"
 	"github.com/gojuno/minimock/v3"
 )
 

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log/slog"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/consts"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/form"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/consts"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/form"
 )
 
 // GetChallenge returns a challenge for the user to solve.

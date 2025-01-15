@@ -8,9 +8,9 @@ import (
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/interfaces/mocks"
-	wisdomtask "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/wisdom-task"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/interfaces/mocks"
+	wisdomtask "github.com/ghost-circuit/word-of-wisdom/internal/domain/service/wisdom-task"
 )
 
 func TestWordOfWisdomService_GetChallenge(t *testing.T) {

@@ -1,6 +1,6 @@
 package quote
 
-import "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
+import "github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
 
 func convertQuoteModelToEntity(m Quote) entity.Quote {
 	return entity.Quote{

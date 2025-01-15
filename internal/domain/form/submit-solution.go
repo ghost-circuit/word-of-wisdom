@@ -1,6 +1,6 @@
 package form
 
-import "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/consts"
+import "github.com/ghost-circuit/word-of-wisdom/internal/domain/consts"
 
 // SubmitSolution is a form for submitting a solution to a challenge.
 type SubmitSolution struct {

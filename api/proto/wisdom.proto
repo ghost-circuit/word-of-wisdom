@@ -4,7 +4,7 @@ package wisdom;
 
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom";
+option go_package = "github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom";
 
 // WordOfWisdomService implements a challenge-response protocol where the server dynamically
 // provides a challenge, and the client must solve it to get the word of wisdom.

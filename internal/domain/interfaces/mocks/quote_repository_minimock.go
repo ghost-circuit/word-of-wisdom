@@ -2,7 +2,7 @@
 
 package mocks
 
-//go:generate minimock -i github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/interfaces.QuoteRepository -o quote_repository_minimock.go -n QuoteRepositoryMock -p mocks
+//go:generate minimock -i github.com/ghost-circuit/word-of-wisdom/internal/domain/interfaces.QuoteRepository -o quote_repository_minimock.go -n QuoteRepositoryMock -p mocks
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	mm_atomic "sync/atomic"
 	mm_time "time"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/entity"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/entity"
 	"github.com/gojuno/minimock/v3"
 )
 

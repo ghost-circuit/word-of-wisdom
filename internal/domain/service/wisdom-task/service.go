@@ -1,7 +1,7 @@
 package wisdom_task
 
 import (
-	"github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/interfaces"
+	"github.com/ghost-circuit/word-of-wisdom/internal/domain/interfaces"
 )
 
 // WisdomTaskService is a service for the WordOfWisdom domain.

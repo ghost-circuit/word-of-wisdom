@@ -5,8 +5,8 @@ import (
 
 	"github.com/gojuno/minimock/v3"
 
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client"
-	"github.com/alisher-baizhumanov/word-of-wisdom/pkg/client/mocks"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/client"
+	"github.com/ghost-circuit/word-of-wisdom/pkg/client/mocks"
 )
 
 func TestService_ExecuteSequential(t *testing.T) {

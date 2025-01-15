@@ -5,8 +5,8 @@ import (
 
 	"google.golang.org/protobuf/types/known/emptypb"
 
-	wisdomtask "github.com/alisher-baizhumanov/word-of-wisdom/internal/domain/service/wisdom-task"
-	desc "github.com/alisher-baizhumanov/word-of-wisdom/pkg/generated/wisdom"
+	wisdomtask "github.com/ghost-circuit/word-of-wisdom/internal/domain/service/wisdom-task"
+	desc "github.com/ghost-circuit/word-of-wisdom/pkg/generated/wisdom"
 )
 
 // WordOfWisdomHandlers is a collection of handlers for the
